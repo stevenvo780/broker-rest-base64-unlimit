@@ -1,5 +1,6 @@
 require('dotenv').config()
 require('./worker');
+require('./config/database');
 const express = require('express');
 const logger = require('morgan');
 const messages = require('./routes/messages') ;
