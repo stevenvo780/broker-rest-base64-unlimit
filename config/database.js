@@ -12,18 +12,14 @@ function getMessages() {
       data.push(row)
     })
     .on('end', () => {
-      //console.log('CSV file successfully processed');
       messages.push(data)
       readStream.destroy();
     })
     .on('close', function () {
-      //console.log("close");
       return messages
     });
 }
 fs.watch("./messages.csv", (eventType, filename) => {
-  /* console.log("\nThe file", filename, "was modified!");
-  console.log("The type of change was:", eventType); */
   getMessages()
 });
 
@@ -40,7 +36,7 @@ function editMessage(
   const csvWriter = createCsvWriter({
     path: 'messages.csv',
     header: [
-      { id: '_id', title: '_id' },
+      { id: 'id', title: 'id' },
       { id: 'message', title: 'message' },
       { id: 'route', title: 'route' },
       { id: 'tried', title: 'tried' },
@@ -51,7 +47,7 @@ function editMessage(
   });
 
   messages[0].forEach(messageData => {
-    if (messageData._id == id) {
+    if (messageData.id == id) {
       messageData.message = message
       messageData.route = route
       messageData.tried = tried
@@ -62,7 +58,7 @@ function editMessage(
   });
 
   const dataResponse = {
-    _id: id,
+    id: id,
     message: message,
     route: route,
     tried: tried,
@@ -85,11 +81,10 @@ function createMessage(
   response_message,
   http_code_response,
 ) {
-  let id = uuidv4()
   const csvWriter = createCsvWriter({
     path: 'messages.csv',
     header: [
-      { id: '_id', title: '_id' },
+      { id: 'id', title: 'id' },
       { id: 'message', title: 'message' },
       { id: 'route', title: 'route' },
       { id: 'tried', title: 'tried' },
@@ -99,18 +94,8 @@ function createMessage(
     ]
   });
 
-  messages[0].push({
-    _id: id,
-    message: message,
-    route: route,
-    tried: tried,
-    states: states,
-    response_message: response_message,
-    http_code_response: http_code_response
-  })
-
   const dataResponse = {
-    _id: id,
+    id: uuidv4(),
     message: message,
     route: route,
     tried: tried,
@@ -118,6 +103,7 @@ function createMessage(
     response_message: response_message,
     http_code_response: http_code_response
   }
+  messages[0].push(dataResponse)
 
   csvWriter
     .writeRecords(messages[0])
@@ -127,11 +113,10 @@ function createMessage(
 }
 
 function deleteMessage(id) {
-  getMessages()
   const csvWriter = createCsvWriter({
     path: './messages.csv',
     header: [
-      { id: '_id', title: '_id' },
+      { id: 'id', title: 'id' },
       { id: 'message', title: 'message' },
       { id: 'route', title: 'route' },
       { id: 'tried', title: 'tried' },
@@ -141,7 +126,7 @@ function deleteMessage(id) {
     ]
   });
   messages[0].forEach(function (messageData, key) {
-    if (messageData._id == id) {
+    if (messageData.id == id) {
       delete messages[0][key]
     }
   });

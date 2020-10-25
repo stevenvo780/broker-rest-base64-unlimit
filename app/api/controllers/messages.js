@@ -7,7 +7,7 @@ module.exports = {
   // Metodo para la busqueda de videojuegos por ID
   getById: function (req, res, next) {
     Messages[0].forEach(message => {
-      if (message._id == req.params.messageId) {
+      if (message.id == req.params.messageId) {
         res.json({ status: "success", message: "Message found!!!", data: { messages: message } });
       }
     });

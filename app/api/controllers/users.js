@@ -19,7 +19,7 @@ module.exports = {
         const csvWriter = createCsvWriter({
           path: 'users.csv',
           header: [
-            { id: '_id', title: '_id' },
+            { id: 'id', title: 'id' },
             { id: 'nombre', title: 'nombre' },
             { id: 'email', title: 'email' },
             { id: 'password', title: 'password' },
@@ -36,14 +36,14 @@ module.exports = {
         if (!error) {
           let password = bcrypt.hashSync(req.body.password, 10)
           data.push({
-            _id: id,
+            id: id,
             nombre: req.body.nombre,
             email: req.body.email,
             password: password,
           })
 
           dataResponse.push({
-            _id: id,
+            id: id,
             nombre: req.body.nombre,
             email: req.body.email,
             password: password,
@@ -74,7 +74,7 @@ module.exports = {
             if (userInfo) {
               if (req.body.password) {
                 if (bcrypt.compareSync(req.body.password, userInfo.password)) {
-                  const token = jwt.sign({ id: userInfo._id }, req.app.get('secretKey'), { expiresIn: '1h' });
+                  const token = jwt.sign({ id: userInfo.id }, req.app.get('secretKey'), { expiresIn: '1h' });
                   res.json({ status: "Ok", message: "El usuario ha sido autenticado!!!", data: { user: userInfo, token: token } });
                 } else {
                   res.json({ status: "error", message: "Invalid email/password!!", data: null });
